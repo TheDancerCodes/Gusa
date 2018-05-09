@@ -10,10 +10,25 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // Specifies two flavor dimensions.
+    flavorDimensions "mock"
+
+    productFlavors {
+
+        mock {
+            applicationId "com.thedancercodes.gus.mock"
+        }
+
+        prod {
+
         }
     }
 }
