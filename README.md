@@ -9,7 +9,7 @@ The Github Users Search App is the contains the project code for the 6
 
 This project is built with Gradle, the [Android Gradle plugin](http://tools.android.com/tech-docs/new-build-system/user-guide). Follow the steps below to setup the project localy.
 
-* Clone [Bartalk App](https://github.com/TheDancerCodes/bartalk-app-demo) inside your working folder.
+* Clone [Github Users Search App](https://github.com/TheDancerCodes/Gusa) inside your working folder.
 * Start Android Studio
 * Select "Open Project" and select the generated root Project folder
 * You may be prompted with "Unlinked gradle project" -> Select "Import gradle project" and select
