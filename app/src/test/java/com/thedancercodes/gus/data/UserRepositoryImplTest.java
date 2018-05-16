@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -100,6 +102,43 @@ public class UserRepositoryImplTest {
     private User user2FullDetails() {
         User user = new User(USER_LOGIN_2_REBECCA, "Rebecca Franks", "avatar_url2", "Bio2");
         return user;
+    }
+
+    /**
+     * Test if an IOException is thrown by the search service call
+     * then the network call will be retried.
+     *
+     * In this test, we are asserting that the githubUserRestService was called twice and
+     * the other network calls were called once.
+     *
+     * We also assert that there were no terminating errors on the subscriber.
+     */
+    @Test
+    public void searchUsers_IOExceptionThenSuccess_SearchUsersRetired() {
+
+        // Given
+        when(githubUserRestService.searchGithubUsers(anyString()))
+                .thenReturn(getIOExceptionError(), Observable.just(githubUserList()));
+        when(githubUserRestService.getUser(anyString()))
+                .thenReturn(Observable.just(user1FullDetails()),
+                        Observable.just(user2FullDetails()));
+
+        // When
+        TestSubscriber<List<User>> subscriber = new TestSubscriber<>();
+        userRepository.searchUsers(USER_LOGIN_RIGAGROO).subscribe(subscriber);
+
+        // Then
+        subscriber.awaitTerminalEvent();
+        subscriber.assertNoErrors();
+
+        verify(githubUserRestService, times(2)).searchGithubUsers(USER_LOGIN_RIGAGROO);
+
+        verify(githubUserRestService).getUser(USER_LOGIN_RIGAGROO);
+        verify(githubUserRestService).getUser(USER_LOGIN_2_REBECCA);
+    }
+
+    private Observable getIOExceptionError() {
+        return Observable.error(new IOException());
     }
 
 }
