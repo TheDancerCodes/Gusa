@@ -8,6 +8,11 @@ import java.util.List;
 
 /**
  * Contracts between the View and the Presenter.
+ *
+ * The Activity should implement the View Contract.
+ *
+ * This is where the Android specific code will be located:
+ * (things such as visibility changes or any UI changes will be located here).
  */
 interface UserSearchContract {
 
