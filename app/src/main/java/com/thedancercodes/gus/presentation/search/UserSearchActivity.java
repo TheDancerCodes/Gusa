@@ -7,6 +7,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -115,23 +116,34 @@ public class UserSearchActivity extends AppCompatActivity implements UserSearchC
         return true;
     }
 
+    // Callbacks that the presenter calls when the items have finished loading.
+    // We are toggling visibility of views here & setting the userAdapter to the new items
+    // the service returned.
     @Override
     public void showSearchResults(List<User> githubUserList) {
-
+        recyclerViewUsers.setVisibility(View.VISIBLE);
+        textViewErrorMessage.setVisibility(View.GONE);
+        usersAdapter.setItems(githubUserList);
     }
 
     @Override
     public void showError(String message) {
-
+        textViewErrorMessage.setVisibility(View.VISIBLE);
+        recyclerViewUsers.setVisibility(View.GONE);
+        textViewErrorMessage.setText(message);
     }
 
     @Override
     public void showLoading() {
-
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerViewUsers.setVisibility(View.GONE);
+        textViewErrorMessage.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
-
+        progressBar.setVisibility(View.GONE);
+        recyclerViewUsers.setVisibility(View.VISIBLE);
+        textViewErrorMessage.setVisibility(View.GONE);
     }
 }
